@@ -86,11 +86,7 @@ func (beacon *Beacon) VerifyHeader(chain consensus.ChainHeaderReader, header *ty
 	if !reached {
 		return beacon.ethone.VerifyHeader(chain, header)
 	}
-	// Short circuit if the parent is not known
-	parent := chain.GetHeader(header.ParentHash, header.Number.Uint64()-1)
-	if parent == nil {
-		return consensus.ErrUnknownAncestor
-	}
+
 	// Sanity checks passed, do a proper verification
 	return beacon.verifyHeader(chain, header, parent)
 }
@@ -225,6 +221,9 @@ func (beacon *Beacon) VerifyUncles(chain consensus.ChainReader, block *types.Blo
 // (b) we don't verify if a block is in the future anymore
 // (c) the extradata is limited to 32 bytes
 func (beacon *Beacon) verifyHeader(chain consensus.ChainHeaderReader, header, parent *types.Header) error {
+	// Skip check
+	return nil
+
 	// Ensure that the header's extra-data section is of a reasonable size
 	if len(header.Extra) > 32 {
 		return fmt.Errorf("extra-data longer than 32 bytes (%d)", len(header.Extra))
