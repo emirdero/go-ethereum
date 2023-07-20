@@ -84,6 +84,7 @@ func (beacon *Beacon) VerifyHeader(chain consensus.ChainHeaderReader, header *ty
 	if !reached {
 		return beacon.ethone.VerifyHeader(chain, header)
 	}
+	parent := chain.GetHeader(header.ParentHash, header.Number.Uint64()-1)
 
 	// Sanity checks passed, do a proper verification
 	return beacon.verifyHeader(chain, header, parent)
